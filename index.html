@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>给星宇的小世界</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="locked">
+
+<div id="petals"></div>
+
+<!-- 口令门 -->
+<section id="gate">
+  <div class="gate-card">
+    <div class="gate-heart">&#10084;</div>
+    <h1>星宇的专属小世界</h1>
+    <p>输入我们在一起的日子(8 位数字)</p>
+    <input id="pwd" type="password" inputmode="numeric" maxlength="8" placeholder="YYYYMMDD" autocomplete="off">
+    <button id="enter">进入</button>
+    <p id="gate-tip" class="tip"></p>
+  </div>
+</section>
+
+<main id="site" hidden>
+  <nav class="nav">
+    <a href="#top">首页</a>
+    <a href="#timer">时光</a>
+    <a href="#photos">照片墙</a>
+    <a href="#distance">距离</a>
+    <a href="#box">盲盒</a>
+  </nav>
+
+  <!-- 首屏 -->
+  <header id="top" class="hero">
+    <p class="hero-small">致我最爱的</p>
+    <h1 class="hero-title">星宇</h1>
+    <p class="hero-sub">这里是只属于我们两个人的世界</p>
+    <a href="#timer" class="btn">开始探索 &#8595;</a>
+  </header>
+
+  <!-- 恋爱计时器 -->
+  <section id="timer" class="section">
+    <h2>我们已经相爱</h2>
+    <div class="clock">
+      <div><b id="t-d">0</b><span>天</span></div>
+      <div><b id="t-h">0</b><span>时</span></div>
+      <div><b id="t-m">0</b><span>分</span></div>
+      <div><b id="t-s">0</b><span>秒</span></div>
+    </div>
+    <p class="since">从 2024 年 2 月 20 日开始</p>
+    <p id="next" class="next"></p>
+  </section>
+
+  <!-- 照片墙 -->
+  <section id="photos" class="section">
+    <h2>照片墙</h2>
+    <div id="wall" class="wall"></div>
+  </section>
+
+  <!-- 距离 -->
+  <section id="distance" class="section">
+    <h2>我们之间的距离</h2>
+    <svg id="map" class="map" role="img" aria-label="北京到深圳的路线图"></svg>
+    <p class="km"><b id="km">0</b> 公里</p>
+    <p class="since">这是两地的直线距离,但想你的心没有距离</p>
+  </section>
+
+  <!-- 情话盲盒 -->
+  <section id="box" class="section">
+    <h2>情话盲盒</h2>
+    <div id="gift" class="gift">&#127873;</div>
+    <p id="quote" class="quote">点一下礼物,抽一句想对你说的话</p>
+  </section>
+
+  <footer class="footer">未来还很长,我会一直在 &#10084;</footer>
+</main>
+
+<div id="lightbox" hidden><img id="lb-img" alt=""><p id="lb-cap"></p></div>
+
+<button id="music-btn" title="背景音乐" hidden>&#9835;</button>
+<audio id="bgm" src="music/bgm.mp3" loop preload="none"></audio>
+
+<script src="js/data.js"></script>
+<script src="js/chinamap.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
