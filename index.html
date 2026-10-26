@@ -29,7 +29,6 @@
     <a href="#timer">时光</a>
     <a href="#photos">照片</a>
     <a href="#cities">足迹</a>
-    <a href="#distance">距离</a>
     <a href="#box">盲盒</a>
     <a href="#wishes">祝福</a>
   </nav>
@@ -68,39 +67,26 @@
     <div id="wall" class="wall"></div>
   </section>
 
-  <!-- 一起去过的城市 -->
+  <!-- 我们的世界:足迹 + 距离 + 两地天气 -->
   <section id="cities" class="section rv">
     <span class="sec-no">03</span>
-    <h2>我们的足迹</h2>
-    <div class="glass mapbox"><svg id="cmap" class="map" role="img" aria-label="一起去过的城市地图"></svg></div>
+    <h2>我们的世界</h2>
+    <div class="glass mapbox"><svg id="cmap" class="map" role="img" aria-label="一起去过的城市和北京到深圳的路线"></svg></div>
     <p class="stat">一起点亮了 <b id="c-cities">0</b> 座城市,<b id="c-provs">0</b> 个省级地区</p>
     <div id="chips" class="chips"></div>
-    <p class="sub">地图还有很多地方没亮,我们慢慢去</p>
-  </section>
 
-  <!-- 距离 -->
-  <section id="distance" class="section rv">
-    <span class="sec-no">04</span>
-    <h2>我们之间的距离</h2>
-    <div class="glass mapbox"><svg id="map" class="map" role="img" aria-label="北京到深圳的路线图"></svg></div>
     <p class="km"><b id="km">0</b> 公里</p>
-    <p class="sub">这是两地的直线距离,但想你的心没有距离</p>
-  </section>
-
-  <!-- 两地天气 -->
-  <section id="weather" class="section rv">
-    <span class="sec-no">05</span>
-    <h2>此刻的两地</h2>
+    <p class="sub">北京到深圳的直线距离,但想你的心没有距离</p>
     <div class="wx">
-      <div class="glass" id="wx-me"><h3>北京</h3><div class="ic">...</div><div class="tp">--</div><div class="ds">&nbsp;</div></div>
-      <div class="glass" id="wx-her"><h3>深圳</h3><div class="ic">...</div><div class="tp">--</div><div class="ds">&nbsp;</div></div>
+      <div class="glass" id="wx-me"><h3>北京 · 此刻</h3><div class="ic">...</div><div class="tp">--</div><div class="ds">&nbsp;</div></div>
+      <div class="glass" id="wx-her"><h3>深圳 · 此刻</h3><div class="ic">...</div><div class="tp">--</div><div class="ds">&nbsp;</div></div>
     </div>
     <p id="wx-tip" class="wx-tip"></p>
   </section>
 
   <!-- 情话盲盒 -->
   <section id="box" class="section rv">
-    <span class="sec-no">06</span>
+    <span class="sec-no">04</span>
     <h2>情话盲盒</h2>
     <div id="gift" class="gift">&#127873;</div>
     <p id="quote" class="quote">点一下礼物,抽一句想对你说的话</p>
@@ -108,7 +94,7 @@
 
   <!-- 祝福墙 -->
   <section id="wishes" class="section rv">
-    <span class="sec-no">07</span>
+    <span class="sec-no">05</span>
     <h2>祝福墙</h2>
     <p class="sub" style="margin:-14px 0 18px">路过的朋友留下的祝福</p>
     <div id="wish-list" class="wishes"></div>

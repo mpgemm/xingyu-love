@@ -153,7 +153,6 @@ $("music-btn").onclick = () => {
 
 renderWall();
 renderCityMap();
-renderRouteMap();
 renderDistance();
 tick();
 setInterval(tick, 1000);

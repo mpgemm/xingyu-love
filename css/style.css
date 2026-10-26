@@ -122,6 +122,9 @@ body.locked{overflow:hidden}
 .visit-dot{fill:#fff;stroke:#e0567f;stroke-width:2.5}
 .prov.fill{fill:url(#litgrad);stroke:#fff;stroke-width:1}
 .inset-name{font-size:15px}
+.bj-name{font-size:20px;font-weight:bold;fill:#7a1f45;paint-order:stroke;stroke:#fff;stroke-width:4px}
+#cities .km{margin-top:30px}
+#cities .wx{margin-top:22px}
 .visit-name{font-size:17px;font-weight:bold;fill:#7a1f45;paint-order:stroke;stroke:#fff;stroke-width:3.5px}
 .km{margin-top:20px;font-size:18px}
 .km b{font-family:var(--serif);font-size:clamp(40px,10vw,56px);background:linear-gradient(180deg,#ff6f9c,#b83a63);

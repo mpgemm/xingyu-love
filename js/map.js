@@ -111,6 +111,7 @@ function renderCityMap() {
     svgEl(svg, "text", { x: x + dx, y: y + dy, class: "visit-name", "text-anchor": anchor }, c.n);
   });
   renderInset(svg);
+  drawRoute(svg);
 
   const chips = document.getElementById("chips");
   VISITED.forEach((c, i) => {
@@ -133,10 +134,8 @@ function renderCityMap() {
   io.observe(sec);
 }
 
-function renderRouteMap() {
-  const svg = document.getElementById("map");
-  if (!svg) return;
-  drawProvinces(svg);
+// 北京到深圳的虚线路径(画在点亮的地图之上)
+function drawRoute(svg) {
   const [bx, by] = project(ME.lon, ME.lat);
   const [sx, sy] = project(HER.lon, HER.lat);
   const d = `M${bx},${by} Q${bx + 90},${(by + sy) / 2} ${sx},${sy}`;
@@ -149,12 +148,9 @@ function renderRouteMap() {
   anim.setAttribute("path", d);
   heart.appendChild(anim);
 
-  [[bx, by, ME.name, "我在这里", -1], [sx, sy, HER.name, "你在这里", 1]].forEach(([x, y, n, s, dir]) => {
-    svgEl(svg, "circle", { cx: x, cy: y, r: 6, class: "pulse" });
-    svgEl(svg, "circle", { cx: x, cy: y, r: 5, class: "dot" });
-    svgEl(svg, "text", { x: x - 12, y: y + (dir < 0 ? -34 : 36), class: "city-name", "text-anchor": "end" }, n);
-    svgEl(svg, "text", { x: x - 12, y: y + (dir < 0 ? -10 : 58), class: "city-sub", "text-anchor": "end" }, s);
-  });
+  svgEl(svg, "circle", { cx: bx, cy: by, r: 6, class: "pulse" });
+  svgEl(svg, "circle", { cx: bx, cy: by, r: 5, class: "dot" });
+  svgEl(svg, "text", { x: bx - 10, y: by - 6, class: "bj-name", "text-anchor": "end" }, ME.name);
 }
 
 // 两地直线距离(haversine 球面距离)
