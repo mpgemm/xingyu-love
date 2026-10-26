@@ -3,7 +3,7 @@ const PASSWORD = "20240220";
 const START = new Date(2024, 1, 20, 0, 0, 0); // 2024-02-20
 
 // 把照片放进 photos/ 目录,然后在这里添加一行
-const PHOTOS = Array.from({ length: 12 }, (_, i) => ({
+const PHOTOS = Array.from({ length: 19 }, (_, i) => ({
   src: `photos/${String(i + 1).padStart(2, "0")}.jpg`,
   caption: "",
 }));
