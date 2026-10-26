@@ -1,21 +1,5 @@
 const $ = (id) => document.getElementById(id);
 
-// 飘落花瓣
-function spawnPetals() {
-  const box = $("petals");
-  const icons = ["🌸", "💗", "🌷"];
-  for (let i = 0; i < 18; i++) {
-    const p = document.createElement("span");
-    p.className = "petal";
-    p.textContent = icons[i % icons.length];
-    p.style.left = Math.random() * 100 + "vw";
-    p.style.fontSize = 12 + Math.random() * 14 + "px";
-    p.style.animationDuration = 8 + Math.random() * 10 + "s";
-    p.style.animationDelay = -Math.random() * 12 + "s";
-    box.appendChild(p);
-  }
-}
-
 // 口令门
 function unlock() {
   const input = $("pwd");
@@ -24,7 +8,8 @@ function unlock() {
     $("site").hidden = false;
     $("music-btn").hidden = false;
     document.body.classList.remove("locked");
-    sessionStorage.setItem("unlocked", "1");
+    typeHero();
+    loadWeather();
     tryPlay();
   } else {
     $("gate-tip").textContent = "再想想我们的纪念日哦~";
@@ -34,7 +19,18 @@ function unlock() {
   }
 }
 
-// 恋爱计时器
+// 首屏打字机
+function typeHero() {
+  const text = "这里是只属于我们两个人的世界";
+  const box = $("typed");
+  let i = 0;
+  const t = setInterval(() => {
+    box.textContent = text.slice(0, ++i);
+    if (i >= text.length) clearInterval(t);
+  }, 120);
+}
+
+// 恋爱计时器 + 下一个纪念日 + 见面倒计时
 function tick() {
   const now = new Date();
   const diff = now - START;
@@ -52,13 +48,19 @@ function tick() {
     const left = Math.ceil((target - now) / 86400000);
     $("next").textContent = `距离我们的第 ${next} 天,还有 ${left} 天`;
   }
+  if (MEET && MEET > now) {
+    const left = Math.ceil((MEET - now) / 86400000);
+    $("meet").textContent = `距离下一次见面,还有 ${left} 天`;
+  } else {
+    $("meet").textContent = "";
+  }
 }
 
 // 照片墙
 function renderWall() {
   const wall = $("wall");
   if (!PHOTOS.length) {
-    wall.innerHTML = '<p class="empty">照片正在路上,马上就来 📷</p>';
+    wall.innerHTML = '<p class="empty">照片正在路上,马上就来</p>';
     return;
   }
   PHOTOS.forEach((p) => {
@@ -67,10 +69,12 @@ function renderWall() {
     img.src = p.src;
     img.alt = p.caption || "";
     img.loading = "lazy";
-    const cap = document.createElement("figcaption");
-    cap.textContent = p.caption || "";
     f.append(img);
-    if (p.caption) f.append(cap);
+    if (p.caption) {
+      const cap = document.createElement("figcaption");
+      cap.textContent = p.caption;
+      f.append(cap);
+    }
     f.onclick = () => {
       $("lb-img").src = p.src;
       $("lb-cap").textContent = p.caption || "";
@@ -81,62 +85,54 @@ function renderWall() {
   $("lightbox").onclick = () => ($("lightbox").hidden = true);
 }
 
-// 中国地图 + 北京到深圳的虚线路径
-function renderMap() {
-  const NS = "http://www.w3.org/2000/svg";
-  const svg = $("map");
-  svg.setAttribute("viewBox", `0 0 ${MAP.w} ${MAP.h}`);
-  const mk = (tag, attrs, text) => {
-    const el = document.createElementNS(NS, tag);
-    for (const k in attrs) el.setAttribute(k, attrs[k]);
-    if (text) el.textContent = text;
-    svg.appendChild(el);
-    return el;
-  };
-  MAP.paths.forEach((d) => mk("path", { d, class: "prov" }));
-
-  const [bx, by] = MAP.bj;
-  const [sx, sy] = MAP.sz;
-  // 控制点向东偏移,让路径呈弧线
-  const d = `M${bx},${by} Q${bx + 90},${(by + sy) / 2} ${sx},${sy}`;
-  mk("path", { d, class: "route-line", id: "route" });
-
-  const heart = mk("text", { class: "fly-heart", "text-anchor": "middle", "dy": "6" }, "❤");
-  const anim = document.createElementNS(NS, "animateMotion");
-  anim.setAttribute("dur", "5s");
-  anim.setAttribute("repeatCount", "indefinite");
-  anim.setAttribute("path", d);
-  heart.appendChild(anim);
-
-  [[bx, by, "北京", "我在这里", -1], [sx, sy, "深圳", "你在这里", 1]].forEach(([x, y, n, s, dir]) => {
-    mk("circle", { cx: x, cy: y, r: 6, class: "pulse" });
-    mk("circle", { cx: x, cy: y, r: 5, class: "dot" });
-    mk("text", { x: x - 12, y: y + (dir < 0 ? -14 : 24), class: "city-name", "text-anchor": "end" }, n);
-    mk("text", { x: x - 12, y: y + (dir < 0 ? 2 : 40), class: "city-sub", "text-anchor": "end" }, s);
-  });
-}
-
-// 两地距离(haversine 球面距离)
-function renderDistance() {
-  const rad = (d) => (d * Math.PI) / 180;
-  const dLat = rad(HER.lat - ME.lat);
-  const dLon = rad(HER.lon - ME.lon);
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(rad(ME.lat)) * Math.cos(rad(HER.lat)) * Math.sin(dLon / 2) ** 2;
-  const km = 2 * 6371 * Math.asin(Math.sqrt(a));
-  $("km").textContent = Math.round(km).toLocaleString();
-}
-
 // 情话盲盒
 let lastQuote = -1;
-function drawQuote() {
+function drawQuote(e) {
   let i;
   do {
     i = Math.floor(Math.random() * QUOTES.length);
   } while (i === lastQuote && QUOTES.length > 1);
   lastQuote = i;
   $("quote").textContent = QUOTES[i];
+  const r = $("gift").getBoundingClientRect();
+  if (window.burstHearts) window.burstHearts(r.left + r.width / 2, r.top + r.height / 2, 22);
+}
+
+// 两地天气(open-meteo,免费、无需密钥;取不到时只显示提示)
+const WX = (c) => {
+  if (c === 0) return ["☀️", "晴"];
+  if (c <= 3) return ["⛅", "多云"];
+  if (c <= 48) return ["🌫️", "有雾"];
+  if (c <= 57) return ["🌦️", "毛毛雨"];
+  if (c <= 67) return ["🌧️", "下雨"];
+  if (c <= 77) return ["❄️", "下雪"];
+  if (c <= 82) return ["🌧️", "阵雨"];
+  return ["⛈️", "雷雨"];
+};
+async function loadWeather() {
+  try {
+    const q = `latitude=${ME.lat},${HER.lat}&longitude=${ME.lon},${HER.lon}`;
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?${q}&current=temperature_2m,weather_code&timezone=auto`);
+    if (!r.ok) throw new Error(r.status);
+    const [a, b] = await r.json();
+    [[a, "wx-me"], [b, "wx-her"]].forEach(([d, id]) => {
+      const [ic, ds] = WX(d.current.weather_code);
+      const box = $(id);
+      box.querySelector(".ic").textContent = ic;
+      box.querySelector(".tp").textContent = Math.round(d.current.temperature_2m) + "°C";
+      box.querySelector(".ds").textContent = ds;
+    });
+    const code = b.current.weather_code;
+    const t = b.current.temperature_2m;
+    let tip = "深圳现在这样,你那边也要照顾好自己";
+    if (code >= 51 && code <= 82) tip = "深圳在下雨,记得带伞";
+    else if (code >= 95) tip = "深圳有雷雨,今天别在外面逛啦";
+    else if (t >= 32) tip = "深圳有点热,记得多喝水";
+    else if (t <= 12) tip = "深圳降温了,多穿一点";
+    $("wx-tip").textContent = tip;
+  } catch (e) {
+    $("wx-tip").textContent = "天气暂时没取到,过会儿再看看";
+  }
 }
 
 // 背景音乐(浏览器可能拦截自动播放,拦截时需要点按钮)
@@ -155,10 +151,10 @@ $("music-btn").onclick = () => {
   }
 };
 
-spawnPetals();
 renderWall();
+renderCityMap();
+renderRouteMap();
 renderDistance();
-renderMap();
 tick();
 setInterval(tick, 1000);
 $("gift").onclick = drawQuote;
