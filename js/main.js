@@ -87,15 +87,48 @@ function renderWall() {
 
 // 情话盲盒
 let lastQuote = -1;
-function drawQuote(e) {
+let boxBusy = false;
+function drawQuote() {
+  if (boxBusy) return;
+  boxBusy = true;
   let i;
   do {
     i = Math.floor(Math.random() * QUOTES.length);
   } while (i === lastQuote && QUOTES.length > 1);
   lastQuote = i;
-  $("quote").textContent = QUOTES[i];
-  const r = $("gift").getBoundingClientRect();
-  if (window.burstHearts) window.burstHearts(r.left + r.width / 2, r.top + r.height / 2, 22);
+
+  const gift = $("gift");
+  const quote = $("quote");
+  quote.classList.remove("show");
+  gift.classList.remove("open");
+  void gift.offsetWidth; // 重新触发动画
+  gift.classList.add("open");
+
+  // 礼盒打开的瞬间,飘出几个小图标
+  const wrap = gift.parentNode;
+  ["💌", "✨", "💖", "🌸", "⭐"].forEach((ch, k) => {
+    const s = document.createElement("span");
+    s.className = "pop-item";
+    s.textContent = ch;
+    s.style.setProperty("--dx", (k - 2) * 38 + "px");
+    s.style.setProperty("--rot", (k - 2) * 18 + "deg");
+    s.style.animationDelay = 0.5 + k * 0.06 + "s";
+    wrap.appendChild(s);
+    setTimeout(() => s.remove(), 2200);
+  });
+
+  setTimeout(() => {
+    quote.textContent = QUOTES[i];
+    void quote.offsetWidth;
+    quote.classList.add("show");
+    const r = gift.getBoundingClientRect();
+    if (window.burstHearts) window.burstHearts(r.left + r.width / 2, r.top + r.height / 2, 22);
+  }, 550);
+
+  setTimeout(() => {
+    gift.classList.remove("open");
+    boxBusy = false;
+  }, 950);
 }
 
 // 两地天气(open-meteo,免费、无需密钥;取不到时只显示提示)

@@ -148,6 +148,23 @@ body.locked{overflow:hidden}
 .gift{font-size:88px;cursor:pointer;display:inline-block;animation:bob 2.4s ease-in-out infinite;
   filter:drop-shadow(0 12px 18px rgba(224,86,127,.4));transition:transform .3s}
 .gift:active{transform:scale(.88) rotate(-6deg)}
+.gift-wrap{position:relative;display:inline-block}
+.gift.open{animation:giftOpen .9s cubic-bezier(.3,1.4,.5,1)}
+@keyframes giftOpen{
+  0%{transform:scale(1) rotate(0)}
+  15%{transform:scale(.88) rotate(-10deg)}
+  30%{transform:scale(1.05) rotate(10deg)}
+  45%{transform:scale(.95) rotate(-8deg)}
+  60%{transform:translateY(-34px) scale(1.25) rotate(6deg)}
+  100%{transform:translateY(0) scale(1) rotate(0)}}
+.pop-item{position:absolute;left:50%;top:30%;font-size:28px;pointer-events:none;opacity:0;
+  animation:riseUp 1.4s ease-out forwards}
+@keyframes riseUp{
+  0%{opacity:0;transform:translate(-50%,0) scale(.4)}
+  20%{opacity:1}
+  100%{opacity:0;transform:translate(calc(-50% + var(--dx)),-120px) scale(1.2) rotate(var(--rot))}}
+.quote.show{animation:quoteIn .9s cubic-bezier(.2,.8,.2,1)}
+@keyframes quoteIn{from{opacity:0;transform:translateY(18px) scale(.96);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
 .quote{margin:20px auto 0;max-width:520px;min-height:64px;font-family:var(--serif);font-size:clamp(17px,4.5vw,21px);line-height:1.9;padding:0 10px}
 
 /* 祝福墙 */
